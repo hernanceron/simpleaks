@@ -20,7 +20,7 @@ jobs:
               run: terraform init
             - id: plan
               name: Terraform Plan
-              run: terraform plan -no-color
+              run: terraform plan -no-color -var appId=$ARM_CLIENT_ID -var password=$ARM_SECRET_CLIENT
             
             - run: echo ${{ steps.plan.outputs.stdout}}
             - run: echo ${{ steps.plan.outputs.stderr}}
