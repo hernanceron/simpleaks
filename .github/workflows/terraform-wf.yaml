@@ -25,3 +25,6 @@ jobs:
             - id: plan
               name: Terraform Plan
               run: terraform plan -no-color -var appId=$ARM_CLIENT_ID -var password=$ARM_SECRET_CLIENT
+            - id: apply
+              name: Terraform Apply
+              run: terraform apply -auto-approve
