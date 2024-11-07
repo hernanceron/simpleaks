@@ -6,8 +6,13 @@ env:
     ARM_TENANT_ID: "${{secrets.AZURE_TENANT_ID}}"
     ARM_SECRET_CLIENT: "${{secrets.AZURE_SECRET_CLIENT}}"
 jobs:
-    steps:
-        - name: Checkout
-          uses: actions/checkout@v4
-        - name: Setup Terraform
-          uses: hashicorp/setup-terraform@v3
+    terraform-plan:
+        name: "Terraform plan"
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v3
+              with:
+                cli_config_credentials_token: ${{secrets.TF_API_TOKEN}}
