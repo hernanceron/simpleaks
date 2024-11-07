@@ -21,7 +21,7 @@ jobs:
               with:
                 creds: ${{secrets.AZURE_CREDENTIALS}}
             - name: Terraform Init
-              run: terraform init
+              run: terraform init -reconfigure -input=false -backend-config="staroge_account_name=mytfstatesahca" -backend-config="container_name=tfstate" -backend-config="access_key=${{secrets.AZURE_STORAGE_ACCESS_KEY}}" -backend-config="key=dev/terraform.tfstate"
             - id: plan
               name: Terraform Plan
               run: terraform plan -no-color -var appId=$ARM_CLIENT_ID -var password=$ARM_SECRET_CLIENT
