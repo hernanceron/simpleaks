@@ -20,4 +20,4 @@ jobs:
             - name: Terraform init
               run: terraform init -backend-config="storage_account_name=mytfstatesahca" -backend-config="container_name=tfstate" -backend-config="access_key=${{secrets.AZURE_STORAGE_ACCESS_KEY}}" -backend-config="key=dev/terraform.tfstate"
             - name: Terraform destroy
-              run: terraform destroy -auto-approve              
+              run: terraform destroy -auto-approve -var appId=$ARM_CLIENT_ID -var password=$ARM_SECRET_CLIENT             
