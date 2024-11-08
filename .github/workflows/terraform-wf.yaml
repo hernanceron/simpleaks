@@ -21,8 +21,13 @@ jobs:
               uses: azure/login@v2
               with:
                 creds: ${{secrets.AZURE_CREDENTIALS}}
+            - name: Get Access Key
+              id: get-access-key
+              run: |
+                PRIMARY_ACCESS_KEY=$(az storage account keys list --resource-group my-terraform-state-rg --account-name mytfstatesahca --query "[0].value" --output tsv)
+                echo "primary_access_key=$PRIMARY_ACCESS_KEY" >> $GITHUB_OUTPUT          
             - name: Terraform Init
-              run: terraform init -reconfigure -input=false -backend-config="storage_account_name=mytfstatesahca" -backend-config="container_name=tfstate" -backend-config="access_key=${{secrets.AZURE_STORAGE_ACCESS_KEY}}" -backend-config="key=dev/terraform.tfstate"
+              run: terraform init -reconfigure -input=false -backend-config="storage_account_name=mytfstatesahca" -backend-config="container_name=tfstate" -backend-config="access_key=${{steps.get-access-key.outputs.primary_access_key}}" -backend-config="key=dev/terraform.tfstate"
             - id: plan
               name: Terraform Plan
               run: terraform plan -no-color -var appId=$ARM_CLIENT_ID -var password=$ARM_SECRET_CLIENT
