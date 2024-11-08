@@ -12,7 +12,7 @@ resource "azurerm_resource_group" "default" {
 # Creando virtual net
 resource "azurerm_virtual_network" "vnetsample" {
   name = "${random_pet.prefix.id}-vnet"
-  address_space = ["10.30.0.0/16"]
+  address_space = ["10.1.0.0/16"]
   location = azurerm_resource_group.default.location
   resource_group_name = azurerm_resource_group.default.name
 }
@@ -20,7 +20,7 @@ resource "azurerm_subnet" "subnetsample" {
   name = "${random_pet.prefix.id}-subnet"
   resource_group_name = azurerm_resource_group.default.name
   virtual_network_name = azurerm_virtual_network.vnetsample.name
-  address_prefixes = [ "10.30.1.0/24" ]
+  address_prefixes = [ "10.1.0.0/24" ]
 }
 # Public IP
 resource "azurerm_public_ip" "publicipsample" {
