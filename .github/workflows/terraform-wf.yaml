@@ -8,7 +8,7 @@ env:
     ARM_SECRET_CLIENT: "${{secrets.AZURE_SECRET_CLIENT}}"
 jobs:
     terraform-plan:
-        name: "Terraform plan"
+        name: "Terraform Deploy AKS"
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
