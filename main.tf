@@ -34,7 +34,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   }
 }
 resource "azurerm_container_registry" "acr" {
-  name = "${random_pet.prefix.id}-aks"
+  name = "${random_pet.prefix.id}-acr"
   location = azurerm_resource_group.default.location
   resource_group_name = azurerm_resource_group.default.name
   sku = "Standard"
