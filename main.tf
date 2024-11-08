@@ -44,5 +44,5 @@ resource "azurerm_role_assignment" "acr-to-kubernetes" {
   role_definition_name = "AcrPull"
   scope = azurerm_container_registry.acr.id
   skip_service_principal_aad_check = true
-  principal_id = azurerm_kubernetes_cluster.default.service_principal.client_id
+  principal_id = azurerm_kubernetes_cluster.default.service_principal[0].client_id
 }
