@@ -45,14 +45,14 @@ resource "azurerm_lb_backend_address_pool" "albpoolsample" {
   name = "${random_pet.prefix.id}-backend-pool"
   loadbalancer_id = azurerm_lb.lbsample.id
 }
-resource "azurerm_lb_outbound_rule" "outboundrulesample" {
-  name = "${random_pet.prefix.id}-outbound-rule"
+resource "azurerm_lb_nat_rule" "aks_lb_nat_rule" {
+  resource_group_name = azurerm_resource_group.default.name
   loadbalancer_id = azurerm_lb.lbsample.id
+  name = "aksNatRule"
   protocol = "Tcp"
-  backend_address_pool_id = azurerm_lb_backend_address_pool.albpoolsample.id
-  frontend_ip_configuration {
-    name = azurerm_lb.lbsample.frontend_ip_configuration[0].name
-  }
+  frontend_port = 80
+  backend_port = 80
+  frontend_ip_configuration_name = "sample-frontend-ip"
 }
 # Creando AKS
 resource "azurerm_kubernetes_cluster" "default" {
@@ -67,6 +67,12 @@ resource "azurerm_kubernetes_cluster" "default" {
     vm_size = "Standard_D2_v2"
     os_disk_size_gb = 30
     vnet_subnet_id = azurerm_subnet.subnetsample.id
+  }
+
+  network_profile {
+    network_plugin = "azure"
+    load_balancer_sku = "standard"
+    outbound_type = "loadBalancer"
   }
 
   service_principal {
