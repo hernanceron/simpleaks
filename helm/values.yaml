@@ -1,0 +1,5 @@
+controller:
+  service:
+    loadBalancerIP: "<tu-ip-publica>"
+    annotations:
+      service.beta.kubernetes.io/azure-load-balancer-resource-group: "<tu-grupo-de-recursos>"
