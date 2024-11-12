@@ -45,15 +45,8 @@ jobs:
             - id: get-aks-credentials
               name: Get AKS Credentials
               run: |
-                az aks get-credentials --resource-group $(terraform output -raw resource_group_name) --name $(terraform output -raw cluster_name) --file kubeconfig.yaml
+                az aks get-credentials --resource-group $(terraform output -raw resource_group_name) --name $(terraform output -raw cluster_name) 
               working-directory: ${{env.WORKING_DIR}}
-            - id: upload-kubeconfig
-              name: Upload kubeconfig
-              uses: actions/upload-artifact@v4
-              with:
-                name: kubeconfig
-                path: ${{env.WORKING_DIR}}/kubeconfig.yaml
-                retention-days: 1
             - id: helm-nginx
               run: |
                kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
