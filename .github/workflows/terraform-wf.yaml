@@ -47,6 +47,16 @@ jobs:
               run: |
                 az aks get-credentials --resource-group $(terraform output -raw resource_group_name) --name $(terraform output -raw cluster_name) 
               working-directory: ${{env.WORKING_DIR}}
-            - id: helm-nginx
+            - id: get-public-ip
+              name: Get public ip of load balancer
               run: |
-               kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+                PUBLIC_IP = $(terraform output -raw public_ip)
+                echo "public_ip=$PUBLIC_IP" >> $GITHUB_OUTPUT
+            - id: helm-nginx
+              name: Actualizando el ingress nginx
+              run: |
+               helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+               helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --version 4.1.0 --namespace ingress-nginx --create-namespace --set controller.service.loadBalancerIP=${{ steps.get-public-ip.outputs.public_ip }}
+            - name: Wait for Ingress NGINX
+              run: |
+                kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.com/component=controller --timeout=90s
